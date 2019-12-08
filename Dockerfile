@@ -1,6 +1,6 @@
 ##
-# Build with: `docker build --tag pdp11-gcc .`
-# Run with: `docker run -it pdp11-gcc bash`
+# Build with: `docker build --tag gcc-pdp11-aout .`
+# Run with: `docker run -it gcc-pdp11-aout bash`
 #
 # Most of these steps were taken from:
 # https://xw.is/wiki/Bare_metal_PDP-11_GCC_9.2.0_cross_compiler_instructions
