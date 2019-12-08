@@ -91,6 +91,9 @@ ADD ./example /usr/local/lib/example
 ADD ./example-display-register /usr/local/lib/example-display-register
 ADD ./example-asm /usr/local/lib/example-asm
 
+# Add the README.md for reference
+ADD ./README.md /usr/local/lib/example/README.md
+
 ENV PATH="/usr/local/lib/bin:${PATH}"
 
 WORKDIR /usr/local/lib

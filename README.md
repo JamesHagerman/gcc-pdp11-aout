@@ -8,10 +8,14 @@ This includes the [PiDP-11](https://obsolescence.wixsite.com/obsolescence/pidp-1
 
 ## Using the prebuilt image
 
-Direct usage of `gcc` and the other tools is not available yet. You'll have to mount your source tree as a docker
-volume for now...
+The Docker image can be pulled from the GitHub Package Registry here: https://github.com/JamesHagerman/gcc-pdp11-aout/packages/71173
 
-`docker run -it gcc-pdp11-aout:working-v2 bash`
+*Note: Direct usage of `gcc` and the other tools is not available yet so you will want a shell.*
+
+```
+docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest
+docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest bash
+```
 
 Once you have a shell inside the container, you will be able to compile C programs!
 
@@ -120,11 +124,18 @@ load your LDA file.
 
 The `blank` system just has a simple blink program in it. I use it to play with the console...
 
-## Building the image yourself
+## Building the image
 
 This will take a while. You'll be compiling `binutil` and `gnu gcc` from source.
 
-`docker build --tag gcc-pdp11-aout:local .`
+*Note: It seems the GitHub docker registry requires you to use github tokens to authenticate correct. Also, only
+use lower case tags.*
+
+```
+docker login docker.pkg.github.com --username <GITHUB_USERNAME> -p <GITHUB_API_TOKEN>
+docker build --tag docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest .
+docker push docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest
+```
 
 ## Resources for taking this further
 
