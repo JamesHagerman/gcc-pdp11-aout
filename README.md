@@ -13,8 +13,8 @@ The Docker image can be pulled from the GitHub Package Registry here: https://gi
 *Note: Direct usage of `gcc` and the other tools is not available yet so you will want a shell.*
 
 ```
-docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest
-docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest bash
+docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout
+docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout bash
 ```
 
 Once you have a shell inside the container, you will be able to compile C programs!
@@ -133,8 +133,8 @@ use lower case tags.*
 
 ```
 docker login docker.pkg.github.com --username <GITHUB_USERNAME> -p <GITHUB_API_TOKEN>
-docker build --tag docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest .
-docker push docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:latest
+docker build --tag docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:`git rev-parse --short HEAD` .
+docker push docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:`git rev-parse --short HEAD`
 ```
 
 ## Resources for taking this further
