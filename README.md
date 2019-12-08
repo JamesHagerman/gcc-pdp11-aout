@@ -80,12 +80,17 @@ root@14031c390c9f:/usr/local/lib# ls
 ... a.out  a.out.lda ...
 ```
 
-As far as I understand, that converted `a.out.lda` file should be acceptable for `simh`'s `load command:
+That converted `a.out.lda` file should be acceptable for `simh`'s `load command:
 
 ```
 sim> load a.out.lda
 sim> run
 ```
+
+However, the `load` command always loads LDA tapes at address 0000 as far as I can tell. And PDP-11 doesn't like
+that.
+
+So, we will need to bootstrap to one of the `Absolute Loader` papertapes from what I can understand.
 
 ## Getting files in and out of the Docker image
 
@@ -106,6 +111,19 @@ gcc-pdp11-aout:working-v2 bash` and then use `docker cp` to get files in and out
 # Copy your LDA tape file to your PiDP-11 (optional)
 % scp ./my-cool-app.lda pidp11:~/
 ```
+
+## Running your program under `simh`
+
+I've created a few "systems" to run in `simh` following the format used by the PiDP-11. Find them in
+`useful-simh-systems`.
+
+The `blank` system just has a simple blink program in it.
+
+The `papertape` system boot straps a paper tape loader, which then loads an Absolute Loader tape. Once that tape has
+been loaded into memory, it prompts you to enter the remaining `simh` commands to load your tape and run it.
+
+I haven't tested this fully yet.
+
 
 ## Building the image yourself
 
