@@ -10,11 +10,18 @@ This includes the [PiDP-11](https://obsolescence.wixsite.com/obsolescence/pidp-1
 
 The Docker image can be pulled from the GitHub Package Registry here: https://github.com/JamesHagerman/gcc-pdp11-aout/packages/71173
 
-*Note: Direct usage of `gcc` and the other tools is not available yet so you will want a shell.*
+*Note: GitHub Package Registry does not treat `latest` correctly; they block the overwriting of tags including `latest`.
+Because `docker pull` assumes that a tag of `latest` exists, this is a conflict. So, you have to supply a correct tag
+from the link above to these commands to work. Sorry...*
 
 ```
-docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout
-docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout bash
+docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:781432c
+```
+
+Direct usage of `gcc` and the other tools is not available yet so you will want a shell.
+
+```
+docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:781432c bash
 ```
 
 Once you have a shell inside the container, you will be able to compile C programs!
