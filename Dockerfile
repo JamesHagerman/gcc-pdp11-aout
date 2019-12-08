@@ -68,6 +68,7 @@ ADD ./tools ./tools
 RUN ["bash", "-c", "\
   pushd tools/ \
   && gcc atolda.c -o atolda \
+  && cp atolda ./bin/ \
   && popd \
 "]
 
@@ -81,19 +82,35 @@ FROM debian:stretch-slim as gcc-pdp11-aout
 COPY --from=builder /usr/local/lib/xgcc /usr/local/lib/xgcc
 COPY --from=builder /usr/local/lib/bin /usr/local/lib/bin
 COPY --from=builder /usr/local/lib/tools /usr/local/lib/tools
-COPY --from=builder /usr/local/lib/example /usr/local/lib/example
 
 # Copy the small bin2load source tree to the smaller image as well (It is a good learning tool!):
 COPY --from=builder /usr/local/lib/retroutils-cd2ecbd096c2c59829000fdabd51bc5284f007f8/bin2load /usr/local/lib/tools/bin2load
 
+# Add the C and ASM examples to the final image
+ADD ./example /usr/local/lib/example
+ADD ./example-asm /usr/local/lib/example-asm
 
 ENV PATH="/usr/local/lib/bin:${PATH}"
 
 WORKDIR /usr/local/lib
 
+# Compile the C example
 RUN ["bash", "-c", "\
-  echo 'int start() { return 0; }' > foo.c; pdp11-aout-gcc -nostdlib foo.c \
+  pushd example/ \
+  && cat foo.c \
+  && pdp11-aout-gcc -nostdlib foo.c \
   && pdp11-aout-objdump -D a.out \
+  && atolda a.out \
+  && popd \
 "]
 
+# Compile the ASM example
+RUN ["bash", "-c", "\
+  pushd example-asm \
+  && pdp11-aout-as putconch.s -o putconch.o \
+  && pdp11-aout-as hellopdp.s -o hellopdp.o \
+  && pdp11-aout-ld -T ldaout.cmd hellopdp.o putconch.o -o hellopdp.out \
+  && bin2load -a -f hellopdp.out -o hellopdp.lda \
+  && popd \
+"]
 CMD ["bash"]

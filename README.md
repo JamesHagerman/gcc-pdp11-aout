@@ -18,10 +18,11 @@ Once you have a shell inside the container, you will be able to compile C progra
 *Note: Keep in mind, this is not your normal C world. Things are different in PDP land! If this is your first time
 coding for the PDP-11, you've got some reading ahead of you...*
 
-### Compiling the example for PDP-11
+### Compiling the C example for PDP-11
+
+*Note: There is also an untested ASM example in the image under `example-asm/`*
 
 There is an extremely simple `foo.c` in the image that can be used to test the compiler as follows. 
-
 
 ```
 root@14031c390c9f:/usr/local/lib# cat foo.c 
@@ -43,8 +44,9 @@ Disassembly of section .text:
 root@14031c390c9f:/usr/local/lib#
 ```
 
-While that may get you a correctly compiled binary, the tricky part is getting that binary running under
-`simh`. Honestly, I'm still figuring that part out. :(
+While that may get you a correctly compiled binary, the tricky is getting that binary running under `simh`.
+
+Honestly, I'm still testing this process...
 
 ### Converting `a.out` formatted binaries to DEC LDA format for `simh`
 
