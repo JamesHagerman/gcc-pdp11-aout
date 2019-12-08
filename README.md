@@ -80,17 +80,7 @@ root@14031c390c9f:/usr/local/lib# ls
 ... a.out  a.out.lda ...
 ```
 
-That converted `a.out.lda` file should be acceptable for `simh`'s `load command:
-
-```
-sim> load a.out.lda
-sim> run
-```
-
-However, the `load` command always loads LDA tapes at address 0000 as far as I can tell. And PDP-11 doesn't like
-that.
-
-So, we will need to bootstrap to one of the `Absolute Loader` papertapes from what I can understand.
+The LDA formated binary is now ready to be loaded by the `Absolute Loader`!
 
 ## Getting files in and out of the Docker image
 
@@ -112,18 +102,23 @@ gcc-pdp11-aout:working-v2 bash` and then use `docker cp` to get files in and out
 % scp ./my-cool-app.lda pidp11:~/
 ```
 
-## Running your program under `simh`
+## Loading and running your program on the PiDP-11/`simh`/PDP-11
 
-I've created a few "systems" to run in `simh` following the format used by the PiDP-11. Find them in
-`useful-simh-systems`.
+To load a program in the LDA format, you can use the `papertape` system configuration under the
+`useful-simh-systems/` directory. The contents of that directory can be copied to the `/opt/pidp11/systems/`
+directory on a `PiDP-11` install. The contents of the `useful-simh-systems/selections` file should be appended
+to the end of the same file and checked to make sure the IDs of the various systems do not conflict.
 
-The `blank` system just has a simple blink program in it.
+The `papertape` system uses the bootstrap loader at the back of the PDP-11 Programming Card to load the Absolute
+Loader tape. Once that tape has been loaded into memory it attaches the `display.lda` example to the `ptr` papertape
+device, then executes the Absolute Loader to load the display register example into RAM.
 
-The `papertape` system boot straps a paper tape loader, which then loads an Absolute Loader tape. Once that tape has
-been loaded into memory, it prompts you to enter the remaining `simh` commands to load your tape and run it.
+As soon as the tape is loaded, the program is executed!
 
-I haven't tested this fully yet.
+To run YOUR program, you'll probably be best off modifying the `useful-simh-systems/papertape/boot.ini` file to
+load your LDA file.
 
+The `blank` system just has a simple blink program in it. I use it to play with the console...
 
 ## Building the image yourself
 
