@@ -68,7 +68,7 @@ ADD ./tools ./tools
 RUN ["bash", "-c", "\
   pushd tools/ \
   && gcc atolda.c -o atolda \
-  && cp atolda ./bin/ \
+  && cp atolda ../bin/ \
   && popd \
 "]
 
@@ -88,19 +88,30 @@ COPY --from=builder /usr/local/lib/retroutils-cd2ecbd096c2c59829000fdabd51bc5284
 
 # Add the C and ASM examples to the final image
 ADD ./example /usr/local/lib/example
+ADD ./example-display-register /usr/local/lib/example-display-register
 ADD ./example-asm /usr/local/lib/example-asm
 
 ENV PATH="/usr/local/lib/bin:${PATH}"
 
 WORKDIR /usr/local/lib
 
-# Compile the C example
+# Compile the C test example
 RUN ["bash", "-c", "\
   pushd example/ \
   && cat foo.c \
   && pdp11-aout-gcc -nostdlib foo.c \
   && pdp11-aout-objdump -D a.out \
   && atolda a.out \
+  && popd \
+"]
+
+# Compile the C display register example
+RUN ["bash", "-c", "\
+  pushd example-display-register/ \
+  && cat display.c \
+  && pdp11-aout-gcc -nostdlib display.c -o display \
+  && pdp11-aout-objdump -D display \
+  && atolda display \
   && popd \
 "]
 

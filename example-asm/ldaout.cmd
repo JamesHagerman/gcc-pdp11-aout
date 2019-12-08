@@ -23,5 +23,4 @@ SECTIONS
   }
   end = .;
 }
-ldaout.cmd (END)
 
