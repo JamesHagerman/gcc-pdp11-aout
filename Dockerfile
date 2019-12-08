@@ -121,6 +121,7 @@ RUN ["bash", "-c", "\
   && pdp11-aout-as putconch.s -o putconch.o \
   && pdp11-aout-as hellopdp.s -o hellopdp.o \
   && pdp11-aout-ld -T ldaout.cmd hellopdp.o putconch.o -o hellopdp.out \
+  && pdp11-aout-objdump -D hellopdp.out \
   && bin2load -a -f hellopdp.out -o hellopdp.lda \
   && popd \
 "]
