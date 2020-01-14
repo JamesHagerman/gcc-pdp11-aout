@@ -8,7 +8,7 @@ This includes the [PiDP-11](https://obsolescence.wixsite.com/obsolescence/pidp-1
 
 ## Using the prebuilt image
 
-The Docker image can be pulled from Docker Hub here: https://hub.docker.com/repository/docker/jameshagerman/gcc-pdp11-aout/general
+The Docker image can be pulled from Docker Hub here: https://hub.docker.com/r/jameshagerman/gcc-pdp11-aout
 
 Pull the image down using one of the tags:
 
