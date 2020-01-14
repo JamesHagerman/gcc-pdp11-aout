@@ -8,26 +8,30 @@ This includes the [PiDP-11](https://obsolescence.wixsite.com/obsolescence/pidp-1
 
 ## Using the prebuilt image
 
-The Docker image can be pulled from the GitHub Package Registry here: https://github.com/JamesHagerman/gcc-pdp11-aout/packages/71173
+The Docker image can be pulled from Docker Hub here: https://hub.docker.com/repository/docker/jameshagerman/gcc-pdp11-aout/general
 
-*Note: GitHub Package Registry does not treat `latest` correctly; they block the overwriting of tags including `latest`.
-Because `docker pull` assumes that a tag of `latest` exists, this is a conflict. So, you have to supply a correct tag
-from the link above to these commands to work. Sorry...*
+Pull the image down using one of the tags:
 
 ```
-docker pull docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:781432c
+docker pull jameshagerman/gcc-pdp11-aout:95392fa
 ```
 
-Direct usage of `gcc` and the other tools is not available yet so you will want a shell.
+The image isn't set up to have volume mounts or anything tricky so you'll want to run the Docker image so it drops you into a shell:
 
 ```
-docker run -it docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:781432c bash
+docker run -it jameshagerman/gcc-pdp11-aout:95392fa bash
 ```
 
 Once you have a shell inside the container, you will be able to compile C programs!
 
 *Note: Keep in mind, this is not your normal C world. Things are different in PDP land! If this is your first time
 coding for the PDP-11, you've got some reading ahead of you...*
+
+
+### GitHub Package Registry Woes
+
+*Note: I ran into far too many stupid issues with GitHub's Package Registry so I've abandoned it. The existing image in GitHub's Registry will remain, but I suggest **NOT** using it for future projects.*
+
 
 ### Compiling the C example for PDP-11
 
@@ -139,9 +143,11 @@ This will take a while. You'll be compiling `binutil` and `gnu gcc` from source.
 use lower case tags.*
 
 ```
-docker login docker.pkg.github.com --username <GITHUB_USERNAME> -p <GITHUB_API_TOKEN>
-docker build --tag docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:`git rev-parse --short HEAD` .
-docker push docker.pkg.github.com/jameshagerman/gcc-pdp11-aout/gcc-pdp11-aout:`git rev-parse --short HEAD`
+docker login
+# Enter your Docker Hub username (not your email!) and password
+
+docker build --tag jameshagerman/gcc-pdp11-aout:`git rev-parse --short HEAD` .
+docker push jameshagerman/gcc-pdp11-aout:`git rev-parse --short HEAD`
 ```
 
 ## Resources for taking this further
