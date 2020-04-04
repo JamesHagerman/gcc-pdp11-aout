@@ -72,16 +72,34 @@ RUN ["bash", "-c", "\
   && popd \
 "]
 
+# Download, extract, and compile macro11
+RUN ["bash", "-c", "\
+  git clone https://gitlab.com/Rhialto/macro11.git \
+  && pushd macro11 \
+  && make \
+  && mv macro11 dumpobj ../bin/ \
+  && mkdir -p ../share/doc/macro11 \
+  && mv README LICENSE ../share/doc/macro11 \
+  && popd \
+"]
+
 #ENV PATH="/usr/local/lib/bin:${PATH}"
 #CMD ["bash"]
 
 # Final image (the final image that will be sent up to dockerhub or whatever image repo)
 FROM debian:stretch-slim as gcc-pdp11-aout
 
+# Install build tools
+RUN ["bash", "-c", "\
+  apt-get update && apt-get install -y --no-install-recommends \
+    make \
+"]
+
 # Copy the compiled tools to the smaller image:
 COPY --from=builder /usr/local/lib/xgcc /usr/local/lib/xgcc
 COPY --from=builder /usr/local/lib/bin /usr/local/lib/bin
 COPY --from=builder /usr/local/lib/tools /usr/local/lib/tools
+COPY --from=builder /usr/local/lib/share /usr/local/lib/share
 
 # Copy the small bin2load source tree to the smaller image as well (It is a good learning tool!):
 COPY --from=builder /usr/local/lib/retroutils-cd2ecbd096c2c59829000fdabd51bc5284f007f8/bin2load /usr/local/lib/tools/bin2load
@@ -89,6 +107,7 @@ COPY --from=builder /usr/local/lib/retroutils-cd2ecbd096c2c59829000fdabd51bc5284
 # Add the C and ASM examples to the final image
 ADD ./example /usr/local/lib/example
 ADD ./example-display-register /usr/local/lib/example-display-register
+ADD ./example-macro11 /usr/local/lib/example-macro11
 ADD ./example-asm /usr/local/lib/example-asm
 
 # Add the README.md for reference
@@ -115,6 +134,13 @@ RUN ["bash", "-c", "\
   && pdp11-aout-gcc -nostdlib display.c -o display \
   && pdp11-aout-objdump -D display \
   && atolda display \
+  && popd \
+"]
+
+# Compile the MACRO11 example
+RUN ["bash", "-c", "\
+  pushd example-macro11 \
+  && make \
   && popd \
 "]
 
