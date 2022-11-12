@@ -11,7 +11,7 @@ FROM gcc:9.2.0 as builder
 # Install build dependencies
 RUN ["bash", "-c", "\
   apt-get update && apt-get install -y --no-install-recommends \
-    wget \
+    curl \
     unzip \
 "]
 
@@ -20,9 +20,9 @@ WORKDIR /usr/local/lib
 
 # Download and extract GCC source tree
 RUN ["bash", "-c", "\
-  wget https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz \
-  && wget https://ftp.gnu.org/gnu/binutils/binutils-2.33.1.tar.gz \
-  && wget ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz \
+  curl -L -O https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz \
+  && curl -L -O https://ftp.gnu.org/gnu/binutils/binutils-2.33.1.tar.gz \
+  && curl -L -O ftp://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz \
   && tar -zxf gcc-9.2.0.tar.gz \
   && tar -zxf binutils-2.33.1.tar.gz \
   && tar -zxf newlib-3.1.0.tar.gz \
@@ -53,7 +53,7 @@ RUN ["bash", "-c", "\
 
 # Download, extract, and compile bin2load
 RUN ["bash", "-c", "\
-  wget https://github.com/jguillaumes/retroutils/archive/cd2ecbd096c2c59829000fdabd51bc5284f007f8.zip \
+  curl -L -O https://github.com/jguillaumes/retroutils/archive/cd2ecbd096c2c59829000fdabd51bc5284f007f8.zip \
   && unzip cd2ecbd096c2c59829000fdabd51bc5284f007f8.zip \
   && pushd retroutils-cd2ecbd096c2c59829000fdabd51bc5284f007f8/bin2load/ \
   && make \
